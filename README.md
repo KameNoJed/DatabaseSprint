@@ -6,6 +6,7 @@ By accessing the project using the link https://github.com/KameNoJed/DatabaseSpr
 
 # Credit And Reference
 https://www.benchresources.net/jdbc-msaccess-database-connection-steps/
+https://www.javatpoint.com/example-to-connect-to-the-mysql-database
 
 # Creator
 Jed Kleinsmith 
