@@ -1,4 +1,7 @@
+package StudentDatabase;
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 public class Student {
@@ -6,64 +9,66 @@ public class Student {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		try {
-			Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
-		} catch (ClassNotFoundException cnfex) {
-			System.out.println("Problem in loading" + " MS Access JDBC driver");
-			cnfex.printStackTrace();
-		}
 
-		try {
-			String url = "C:\\Users\\Our\\Desktop\\JedWork\\1.Java\\StudentData.mdb";
-			String dbURL = "jdbc:odbc:Driver=" + "{Microsoft Access Driver (*.mdb, *.accdb)};" + "DBQ=" + url
-					+ ";DriverID=22;READONLY=true";
+		String Name, Surname, Gender, DOB, Contact;
+		Integer Day, Year, Gr, Month;
+		String pName, pSurname, Address;
+		Integer numKids;
 
-			Connection con = DriverManager.getConnection(dbURL);
+		Name = JOptionPane.showInputDialog("Input Student Name");
 
-			Statement st = con.createStatement();
+		Surname = JOptionPane.showInputDialog("Input Student Surname");
 
-			String sql = "SELCET * FROM sDetails";
-			ResultSet rs = st.executeQuery(sql);
+		Gender = JOptionPane.showInputDialog("Input Student Gender Male/Gender");
 
-			while (rs.next()) {
-				String sName = rs.getString("Name");
-				String sSurname = rs.getString("Surname");
-				String sGender = rs.getString("Gender");
-				Integer sGrade = rs.getInt("Grade");
-				String sDOB = rs.getString("DOB");
-				System.out.println(
-						sName + "\n" + sSurname + "\n" + sGender + "\n" + Integer.toString(sGrade) + "\n" + sDOB);
-			}
-			con.close();
-		} catch (Exception sqlEx) {
-			System.out.println(sqlEx);
-		}
-		
-		
-		String Name, Surname, Gender, Month, DOB;
-		Integer Day, Year, Gr;
+		Day = Integer.parseInt(JOptionPane.showInputDialog("Input Student day of birth"));
 
-		Name = JOptionPane.showInputDialog("Input Name");
+		Month = Integer.parseInt(JOptionPane.showInputDialog("Input Student birth month"));
 
-		Surname = JOptionPane.showInputDialog("Input Surname");
+		Year = Integer.parseInt(JOptionPane.showInputDialog("Input Student year of birth"));
 
-		Gender = JOptionPane.showInputDialog("Input Gender Male/Gender");
+		Gr = Integer.parseInt(JOptionPane.showInputDialog("Input Student Grade"));
 
-		Month = JOptionPane.showInputDialog("Input name of birth month");
+		pName = JOptionPane.showInputDialog("Input Parent Name");
 
-		Day = Integer.parseInt(JOptionPane.showInputDialog("Input day of birth"));
+		pSurname = JOptionPane.showInputDialog("Input Parent Surame");
 
-		Year = Integer.parseInt(JOptionPane.showInputDialog("Input year of birth"));
+		Address = JOptionPane.showInputDialog("Input Parent" + " Address");
 
-		Gr = Integer.parseInt(JOptionPane.showInputDialog("Input Grade"));
+		numKids = Integer.parseInt(JOptionPane.showInputDialog("Input number of children at school"));
 
-		DOB = Integer.toString(Day) + " " + Month + " " + Integer.toString(Year);
+		Contact = JOptionPane.showInputDialog("Input parent phone number");
 
-		System.out.println(Name + " " + Surname);
-		System.out.println(Gender);
-		System.out.println(DOB);
-		System.out.println(Integer.toString(Gr));
-	}
+		DOB = Integer.toString(Day) + "/" + Integer.toString(Month) + "/" + Integer.toString(Year);
 
+
+		  try
+	        {
+	             Class.forName("com.mysql.jdbc.Driver");
+	             Connection con = DriverManager.getConnection(
+	            		 "jdbc:mysql://localhost:8293/StudentData", "password", "password");
+
+	             
+	             
+	             System.out.println("Database Connection Success");
+	             String query = "INSERT INTO sDetails VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	             PreparedStatement preparedStmt = con.prepareStatement(query);
+	             preparedStmt.setString(1, Name);
+	             preparedStmt.setString(2, Surname);
+	             preparedStmt.setString(3, DOB);
+	             preparedStmt.setString(4, Gender);
+	             preparedStmt.setInt(5, Gr);
+	             preparedStmt.setString(6, pName);
+	             preparedStmt.setString(7, pSurname);
+	             preparedStmt.setString(8, Address);
+	             preparedStmt.setString(9, Contact);
+	             preparedStmt.setInt(10, numKids);
+	             preparedStmt.executeUpdate();
+	             System.out.println("Record inserted successfully.");
+	        }
+	        catch (ClassNotFoundException ex) {Logger.getLogger(Student.class.getName()).log(Level.SEVERE, null, ex);}
+	        catch (SQLException ex) {Logger.getLogger(Student.class.getName()).log(Level.SEVERE, null, ex);}
+	    }
+	
 }
 
